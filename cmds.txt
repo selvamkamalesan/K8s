@@ -1,0 +1,94 @@
+
+ssh 172.16.103.183 -l hitachi
+export OS_USERNAME=71297141
+source myenv.sh
+
+general:
+kubectl get all 
+
+---
+test
+
+kubectl run --generator=run-pod/v1 nginx-pod --image=nginx:alpine
+kubectl run --generator=run-pod/v1 redis --image=redis:alpine -l tier=db
+kubectl expose pod redis --port=6379 --name redis-service
+kubectl create deployment webapp --image=kodekloud/webapp-color
+kubectl scale deployment/webapp --replicas=3
+
+---
+
+
+pods:
+-------
+kubectl run nginx --image nginx  // it creates deployment
+kubectl cluster-info
+kubectl create -f *.yaml
+
+kubectl get pods
+kubectl get pods -o wide (which node & IP will be listed
+kubectl describe pods
+kubectl describe pod pod-name
+kubectl delete pod name-of-pod
+
+
+replicasets:
+-------------
+kubectl create -f *.yaml
+kubectl get replicationcontroller
+kubectl get replicasets
+kubectl describe replicaset
+Scale 
+-----
+1. update replicas number in the file
+   kubectl replace -f file.yaml
+2. kubectl scale --replicas=6 -f file.yaml
+   or
+   kubectl scale --replicas=6 replicaset replicaset-name
+   <<this option wont update the replicas in the file>>
+
+deployment:
+------------
+kubectl create -f *.yaml
+kubectl delete deployment dep-name
+kubectl run nginx --image nginx  // it creates deployment
+kubectl create -f deployment.yaml --record
+<This ll record the changes of revision, Good practis>
+
+
+
+RollOut
+--------
+kubectl rollout status deployment/deployment-name
+
+kubectl rollout history deployment/deployment-name
+
+Strategy : 
+1. recreate (terminate all, create all)
+2. rollingUpdate (default one) 
+    it created one by one
+
+After changing the image version, 
+-> kubectl apply -f deployment-file-name
+-> kubectl set image deployment/deplymnt-name nginx=nginx:1.9.1
+
+
+Rollback
+--------
+kubectl rollout undo deployment/deployment-name
+<<It will revert the changes and go back to the previous change>>
+
+
+Service
+--------
+kubectl get services
+
+
+
+k8s
+
+https://github.com/mmumshad/kubernetes-example-voting-app-singlefile/blob/master/voting-app.yaml
+https://github.com/dgkanatsios/CKAD-exercises
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+https://matthewpalmer.net/kubernetes-app-developer/index.html#purchase
+https://github.com/twajr/ckad-prep-notes
+https://stackoverflow.com/questions/tagged/kubernetes
