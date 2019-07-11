@@ -1,0 +1,49 @@
+Pod:
+kubectl run --generator=run-pod/v1 nginx-pod --image=nginx
+kubectl run --generator=run-pod/v1 redis --image=redis -l tier=db 
+kubectl run --generator=run-pod/v1 nginx --image=nginx --dry-run -o yaml
+kubectl run --generator=run-pod/v1 nginx --image=nginx --port=8080 --env="DNS_DOMAIN=cluster" --dry-run -o yaml
+kubectl create  -f  *.yaml
+kubectl edit pod pod-name      -  edit already running pod
+kubectl apply  -f  *.yaml      - edit file and apply
+kubectl get pod -o wide
+kubectl get pod <podname>
+kubectl delete pod <podname>
+kubectl describe pod <podname>
+
+Replicaset:
+kubectl create -f *.yaml
+kubectl get replicationcontroller
+kubectl get replicasets
+kubectl delete replicaset <rp-name>
+kubectl describe replicaset
+kubectl edit replicaset replicaset-name      -  edit already running replicaset
+
+Scale 
+-----
+1. update replicas number in the file
+   kubectl replace -f file.yaml
+2. kubectl scale --replicas=6 -f file.yaml
+   or
+   kubectl scale --replicas=6 replicaset replicaset-name
+   <<this option wont update the replicas in the file>>
+
+Deployment
+kubectl create -f *.yaml --record
+kubectl run nginxx --image ngin
+kubectl delete deployment dep-name
+kubectl run --generator=deployment/v1beta1 nginx --image=nginx     
+Or
+kubectl create deployment --image=nginx nginx
+
+kubectl run --generator=deployment/v1beta1 nginx --image=nginx --dry-run -o yaml
+Or
+kubectl create deployment --image=nginx nginx --dry-run -o yaml
+
+kubectl run --generator=deployment/v1beta1 nginx --image=nginx --dry-run --replicas=4 -o yaml
+kubectl create deployment does not have a --replicas option. You could first create it and then scale it using the kubectl scale command.
+kubectl run --generator=deployment/v1beta1 nginx --image=nginx --dry-run --replicas=4 -o yaml > nginx-deployment.yaml
+
+Service:
+kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run -o yaml
+kubectl expose deployment webapp --type=NodePort --port=8080 --name=webapp-service --dry-run -o yaml > webapp-service.yaml
