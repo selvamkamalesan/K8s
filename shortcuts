@@ -1,3 +1,5 @@
+
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#expose
 Pod:
 kubectl run --generator=run-pod/v1 nginx-pod --image=nginx
 kubectl run --generator=run-pod/v1 redis --image=redis -l tier=db 
@@ -10,6 +12,9 @@ kubectl get pod -o wide
 kubectl get pod <podname>
 kubectl delete pod <podname>
 kubectl describe pod <podname>
+kubectl get pod my-pod -o yaml                # Get a pod's YAML
+kubectl get pod my-pod -o yaml --export       # Get a pod's YAML without cluster specific information
+
 
 Replicaset:
 kubectl create -f *.yaml
@@ -45,5 +50,9 @@ kubectl create deployment does not have a --replicas option. You could first cre
 kubectl run --generator=deployment/v1beta1 nginx --image=nginx --dry-run --replicas=4 -o yaml > nginx-deployment.yaml
 
 Service:
-kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run -o yaml
-kubectl expose deployment webapp --type=NodePort --port=8080 --name=webapp-service --dry-run -o yaml > webapp-service.yaml
+
+kubectl create service nodeport nginx --tcp=80:8000 --node-port=30080 --dry-run -o yaml
+kubectl expose deployment nginx --type=NodePort --port=80 --target-port=8000 --name=nginx-serv --dry-run -o yaml
+
+namespace:
+kubectl create namespace dev
