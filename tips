@@ -1,0 +1,21 @@
+export n=pod nginx
+alias kg='kubectl get $n  --export -o yaml > file.yaml'
+alias kd='kubectl run --dry-run -o yaml'
+alias k="kubectl"
+alias kr="kubectl run"
+
+
+Speed up deletions.  --grace-period=0 -force
+
+kubectl config set-context
+
+vi editor :
+
+v to select
+V to select full line
+d to delete/cut
+y to copy
+p to paste
+dd to delte line
+
+      
